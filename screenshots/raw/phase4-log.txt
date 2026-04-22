@@ -1,0 +1,19 @@
+$ ./pes log
+commit c4a8f4579f828b4e602af7cf8a4a34b396eb0c709ed6dc516a867dd93d6623a0
+Author: Dhoni Satwik <PES1UG24CS321>
+Date:   1776831819
+
+    Add farewell
+
+commit ffbc36b3bd5ea3e8a41869fc0280cf47439f7b136ff66f8d8f7c465d363d20a3
+Author: Dhoni Satwik <PES1UG24CS321>
+Date:   1776831819
+
+    Add world
+
+commit e9e6a3d170ca3f98964e5b42a118bffac05cd50204fc4dd1e32bed481a4c9e20
+Author: Dhoni Satwik <PES1UG24CS321>
+Date:   1776831819
+
+    Initial commit
+
