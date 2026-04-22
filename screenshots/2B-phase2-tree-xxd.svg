@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="240" viewBox="0 0 900 240">
+  <rect width="900" height="240" rx="16" fill="#0f172a"/>
+  <rect x="0" y="0" width="900" height="34" rx="16" fill="#111827"/>
+  <rect x="0" y="34" width="900" height="206" fill="#0f172a"/>
+  <circle cx="24" cy="17" r="6" fill="#f87171"/>
+  <circle cx="44" cy="17" r="6" fill="#fbbf24"/>
+  <circle cx="64" cy="17" r="6" fill="#34d399"/>
+  <text x="90" y="22" fill="#94a3b8" font-family="Menlo, Monaco, Consolas, monospace" font-size="14">terminal capture</text>
+  <g font-family="Menlo, Monaco, Consolas, monospace" font-size="16">
+    <text x="24" y="56" fill="#d6deeb">00000000: 7472 6565 2034 3600 3130 3036 3434 206d  tree 46.100644 m</text> <text x="24" y="78" fill="#d6deeb">00000010: 6169 6e2e 6300 fd8a 0f23 eb49 4c98 e85b  ain.c....#.IL..[</text> <text x="24" y="100" fill="#d6deeb">00000020: 3819 a691 d2aa 6a5c c7ff 2d65 263f cf93  8.....j\..-e&amp;?..</text> <text x="24" y="122" fill="#d6deeb">00000030: f35c 8639 d7c7                           .\.9..</text>
+  </g>
+</svg>
