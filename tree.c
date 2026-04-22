@@ -13,14 +13,27 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <dirent.h>
 #include <sys/stat.h>
+
+#include "index.h"
+
+// Forward declaration from object.c
+int object_write(ObjectType type, const void *data, size_t len, ObjectID *id_out);
+__attribute__((weak)) int index_load(Index *index);
 
 // ─── Mode Constants ─────────────────────────────────────────────────────────
 
 #define MODE_FILE      0100644
 #define MODE_EXEC      0100755
 #define MODE_DIR       0040000
+
+static int write_tree_level(const Index *index, const char *prefix, ObjectID *id_out);
+
+__attribute__((weak)) int index_load(Index *index) {
+    if (!index) return -1;
+    index->count = 0;
+    return -1;
+}
 
 // ─── PROVIDED ───────────────────────────────────────────────────────────────
 
@@ -130,8 +143,65 @@ int tree_serialize(const Tree *tree, void **data_out, size_t *len_out) {
 //
 // Returns 0 on success, -1 on error.
 int tree_from_index(ObjectID *id_out) {
-    // TODO: Implement recursive tree building
-    // (See Lab Appendix for logical steps)
-    (void)id_out;
-    return -1;
+    Index index;
+    if (index_load(&index) != 0) return -1;
+    return write_tree_level(&index, "", id_out);
+}
+
+static int write_tree_level(const Index *index, const char *prefix, ObjectID *id_out) {
+    Tree tree;
+    tree.count = 0;
+    size_t prefix_len = strlen(prefix);
+    char seen_dirs[MAX_TREE_ENTRIES][256];
+    int seen_count = 0;
+
+    for (int i = 0; i < index->count; i++) {
+        const IndexEntry *entry = &index->entries[i];
+        if (prefix_len > 0 && strncmp(entry->path, prefix, prefix_len) != 0) continue;
+
+        const char *rest = entry->path + prefix_len;
+        if (*rest == '\0') continue;
+
+        const char *slash = strchr(rest, '/');
+        if (!slash) {
+            if (tree.count >= MAX_TREE_ENTRIES) return -1;
+            TreeEntry *tree_entry = &tree.entries[tree.count++];
+            tree_entry->mode = entry->mode;
+            tree_entry->hash = entry->hash;
+            snprintf(tree_entry->name, sizeof(tree_entry->name), "%s", rest);
+            continue;
+        }
+
+        size_t dir_len = (size_t)(slash - rest);
+        if (dir_len == 0 || dir_len >= sizeof(seen_dirs[0])) return -1;
+
+        int already_seen = 0;
+        for (int j = 0; j < seen_count; j++) {
+            if (strncmp(seen_dirs[j], rest, dir_len) == 0 && seen_dirs[j][dir_len] == '\0') {
+                already_seen = 1;
+                break;
+            }
+        }
+        if (already_seen) continue;
+
+        if (seen_count >= MAX_TREE_ENTRIES || tree.count >= MAX_TREE_ENTRIES) return -1;
+        memcpy(seen_dirs[seen_count], rest, dir_len);
+        seen_dirs[seen_count][dir_len] = '\0';
+        seen_count++;
+
+        char child_prefix[512];
+        snprintf(child_prefix, sizeof(child_prefix), "%s%.*s/", prefix, (int)dir_len, rest);
+
+        TreeEntry *tree_entry = &tree.entries[tree.count++];
+        tree_entry->mode = MODE_DIR;
+        snprintf(tree_entry->name, sizeof(tree_entry->name), "%.*s", (int)dir_len, rest);
+        if (write_tree_level(index, child_prefix, &tree_entry->hash) != 0) return -1;
+    }
+
+    void *data = NULL;
+    size_t len = 0;
+    if (tree_serialize(&tree, &data, &len) != 0) return -1;
+    int rc = object_write(OBJ_TREE, data, len, id_out);
+    free(data);
+    return rc;
 }
