@@ -1,0 +1,35 @@
+$ ./pes init
+Initialized empty PES repository in .pes/
+
+$ echo hello > file1.txt
+$ echo world > file2.txt
+$ ./pes add file1.txt file2.txt
+
+$ ./pes status
+Staged changes:
+  staged:     file1.txt
+  staged:     file2.txt
+
+Unstaged changes:
+  (nothing to show)
+
+Untracked files:
+  untracked:  index.h
+  untracked:  object.c
+  untracked:  pes.c
+  untracked:  Makefile
+  untracked:  test_objects
+  untracked:  tree.h
+  untracked:  test_objects.c
+  untracked:  commit.c
+  untracked:  test_tree
+  untracked:  README.md
+  untracked:  index.c
+  untracked:  test_sequence.sh
+  untracked:  .gitignore
+  untracked:  test_tree.c
+  untracked:  pes.h
+  untracked:  README.phase2.md
+  untracked:  commit.h
+  untracked:  tree.c
+
