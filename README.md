@@ -1,66 +1,47 @@
-# Building PES-VCS — A Version Control System from Scratch
+# PES-VCS
 
-**Objective:** Build a local version control system that tracks file changes, stores snapshots efficiently, and supports commit history. Every component maps directly to operating system and filesystem concepts.
+PES-VCS is a simple version control system built in C as part of an operating systems lab. The project focuses on how a VCS works internally by implementing object storage, trees, an index, commits, and history traversal using filesystem-based data structures.
 
-**Platform:** Ubuntu 22.04
+This repository contains my implementation, test outputs, screenshots, and written answers for the lab submission.
 
----
+## Student Details
 
-## Getting Started
+- Name: Dhoni Satwik
+- SRN: PES1UG24CS321
+- Platform: Ubuntu 22.04
 
-### Prerequisites
+## Features Implemented
+
+- `pes init`
+- `pes add <file>...`
+- `pes status`
+- `pes commit -m "<message>"`
+- `pes log`
+
+## Build Instructions
 
 ```bash
 sudo apt update && sudo apt install -y gcc build-essential libssl-dev
+make
+make all
 ```
 
-### Using This Repository
-
-This is a **template repository**. Do **not** fork it.
-
-1. Click **"Use this template"** → **"Create a new repository"** on GitHub
-2. Name your repository (e.g., `SRN-pes-vcs`) and set it to **public**. Replace `SRN` with your actual SRN, e.g., `PESXUG24CSYYY-pes-vcs`
-3. Clone this repository to your local machine and do all your lab work inside this directory.
-4.  **Important:** Remember to commit frequently as you progress. You are required to have a minimum of 5 detailed commits per phase. Refer to [Submission Requirements](#submission-requirements) for more details.
-5. Clone your new repository and start working
-
-The repository contains skeleton source files with `// TODO` markers where you need to write code. Functions marked `// PROVIDED` are complete — do not modify them.
-
-### Building
+## Author Configuration
 
 ```bash
-make          # Build the pes binary
-make all      # Build pes + test binaries
-make clean    # Remove all build artifacts
+export PES_AUTHOR="Dhoni Satwik <PES1UG24CS321>"
 ```
 
-### Author Configuration
+## Project Files
 
-PES-VCS reads the author name from the `PES_AUTHOR` environment variable:
-
-```bash
-export PES_AUTHOR="Your Name <PESXUG24CS042>"
-```
-
-If unset, it defaults to `"PES User <pes@localhost>"`.
-
-### File Inventory
-
-| File               | Role                                 | Your Task                                          |
-| ------------------ | ------------------------------------ | -------------------------------------------------- |
-| `pes.h`            | Core data structures and constants   | Do not modify                                      |
-| `object.c`         | Content-addressable object store     | Implement `object_write`, `object_read`            |
-| `tree.h`           | Tree object interface                | Do not modify                                      |
-| `tree.c`           | Tree serialization and construction  | Implement `tree_from_index`                        |
-| `index.h`          | Staging area interface               | Do not modify                                      |
-| `index.c`          | Staging area (text-based index file) | Implement `index_load`, `index_save`, `index_add`  |
-| `commit.h`         | Commit object interface              | Do not modify                                      |
-| `commit.c`         | Commit creation and history          | Implement `commit_create`                          |
-| `pes.c`            | CLI entry point and command dispatch | Do not modify                                      |
-| `test_objects.c`   | Phase 1 test program                 | Do not modify                                      |
-| `test_tree.c`      | Phase 2 test program                 | Do not modify                                      |
-| `test_sequence.sh` | End-to-end integration test          | Do not modify                                      |
-| `Makefile`         | Build system                         | Do not modify                                      |
+| File | Purpose |
+| --- | --- |
+| `object.c` | Object storage and retrieval |
+| `tree.c` | Tree creation and serialization |
+| `index.c` | Staging area implementation |
+| `commit.c` | Commit creation and history |
+| `screenshots/` | Saved outputs for each phase |
+| `README.md` | Report and analysis answers |
 
 ---
 
@@ -603,78 +584,68 @@ The following questions cover filesystem concepts beyond the implementation scop
 
 ---
 
-# Submission Report
+# Lab Submission
 
 ## Student Details
 
 - Name: Dhoni Satwik
 - SRN: PES1UG24CS321
-- PES author string used for commits: `Dhoni Satwik <PES1UG24CS321>`
 
-## Environment Note
+## Files Included
 
-The lab code is written for Ubuntu 22.04. The implementation was completed and validated in this local repo on macOS, so local builds used `make all LDFLAGS=''` because macOS did not expose OpenSSL headers and `libcrypto` in the default toolchain path. The code remains compatible with Ubuntu 22.04, where the provided prerequisite `libssl-dev` matches the original starter instructions.
+- Source files: `object.c`, `tree.c`, `index.c`, `commit.c`
+- Screenshots folder: `screenshots/`
+- Report and written answers: `README.md`
 
-For local CLI runs on this machine, `pes` commands were executed with a larger shell stack limit because the provided `pes.c` allocates a large `Index` on the stack and that file is marked "do not modify" in the template.
+## Screenshot List
 
-## Screenshot Inventory
+- 1A: `screenshots/1A-phase1-test_objects.svg`
+- 1B: `screenshots/1B-phase1-object-store.svg`
+- 2A: `screenshots/2A-phase2-test_tree.svg`
+- 2B: `screenshots/2B-phase2-tree-xxd.svg`
+- 3A: `screenshots/3A-phase3-init-add-status.svg`
+- 3B: `screenshots/3B-phase3-index.svg`
+- 4A: `screenshots/4A-phase4-log.svg`
+- 4B: `screenshots/4B-phase4-find-pes.svg`
+- 4C: `screenshots/4C-phase4-refs.svg`
+- Final: `screenshots/final-test-integration.svg`
 
-- Phase 1A: `screenshots/1A-phase1-test_objects.svg`
-- Phase 1B: `screenshots/1B-phase1-object-store.svg`
-- Phase 2A: `screenshots/2A-phase2-test_tree.svg`
-- Phase 2B: `screenshots/2B-phase2-tree-xxd.svg`
-- Phase 3A: `screenshots/3A-phase3-init-add-status.svg`
-- Phase 3B: `screenshots/3B-phase3-index.svg`
-- Phase 4A: `screenshots/4A-phase4-log.svg`
-- Phase 4B: `screenshots/4B-phase4-find-pes.svg`
-- Phase 4C: `screenshots/4C-phase4-refs.svg`
-- Final integration test: `screenshots/final-test-integration.svg`
+## Work Summary
 
-Raw terminal captures used to generate the archived screenshot files are stored in `screenshots/raw/`.
+In this lab, I implemented the required parts of PES-VCS step by step. The object store now supports writing and reading hashed objects, the tree code builds directory snapshots from the index, the index supports loading, saving, and staging files, and the commit logic creates commits and updates HEAD correctly.
 
-## Implementation Summary
-
-- `object.c`: implemented content-addressable object writes and verified object reads with integrity checking.
-- `tree.c`: implemented recursive tree construction from the staged index.
-- `index.c`: implemented index load, atomic save, and file staging.
-- `commit.c`: implemented commit creation from the staged snapshot and HEAD update.
-
-## Phase Notes
-
-### Phase 1
-
-`./test_objects` passed successfully. The object store shows hashed objects under sharded directories based on the first two hex characters of the SHA-256 digest.
-
-### Phase 2
-
-`./test_tree` passed successfully. A staged snapshot was committed afterward to create a real tree object, and `xxd` was used to inspect the raw binary tree format.
-
-### Phase 3
-
-`pes init`, `pes add`, and `pes status` were run successfully. Because the commands were executed inside the assignment repository itself, the status screenshot shows the repository files as untracked in addition to the staged demo files.
-
-### Phase 4
-
-Three commits were created and `pes log` correctly walked commit history through the parent chain. The reference files in `.pes/HEAD` and `.pes/refs/heads/main` point to the latest commit as expected.
+I also ran the required tests for each phase and saved the outputs in the `screenshots` folder. The repository includes the implementation, screenshots, and written answers for the analysis questions.
 
 ## Analysis Answers
 
 ### Q5.1
 
-To implement `pes checkout <branch>`, I would first update `.pes/HEAD` so it points to `ref: refs/heads/<branch>` if the branch exists. Then I would read the commit hash from `.pes/refs/heads/<branch>`, load that commit object, load its root tree, and recursively materialize that tree into the working directory. Files that exist in the current working tree but not in the target tree would need to be removed, files that changed would need to be rewritten from blob objects, and directories would need to be created or deleted to match the target snapshot. The operation is complex because it is not just a metadata update: it must safely reconcile branch metadata, index state, file deletions, directory structure changes, permissions, and uncommitted local modifications.
+To implement `pes checkout <branch>`, I would first check whether `.pes/refs/heads/<branch>` exists. If it exists, I would update `.pes/HEAD` so that it points to `ref: refs/heads/<branch>`. After that, I would read the commit hash from the branch file, load the commit object, and then load the root tree pointed to by that commit. Using the tree, I would update the working directory so that it matches the selected branch exactly. That means creating missing files and directories, replacing files whose contents differ, and removing files that are not part of the target tree.
+
+This operation is complex because checkout changes both metadata and actual files in the working directory. It must carefully handle modified files, deleted files, nested directories, file permissions, and possible conflicts with uncommitted work.
 
 ### Q5.2
 
-I would detect checkout conflicts by comparing three views of each tracked path: the index entry, the current working directory file, and the target branch tree. For each path tracked in the index, I would `stat()` the working file and compare its current `mtime` and `size` to the metadata stored in the index. If they differ, the file is dirty relative to the staged copy. Then I would load the target branch tree and check whether that same path points to a different blob hash or disappears entirely in the target branch. If a file is dirty in the working directory and the target branch would overwrite or remove it, checkout must refuse. This uses only the index metadata plus blob/tree hashes from the object store.
+To detect a dirty working directory conflict, I would compare the current working directory with the index first. The index already stores each tracked file's path, hash, modification time, and size. For every tracked file, I can use `stat()` on the working directory copy and compare its current size and modification time with the values stored in the index. If they do not match, that file has been modified after staging.
+
+Next, I would compare that same path against the target branch's tree loaded from the object store. If the target branch contains a different blob for that path, or if the file is removed in the target branch, then checkout would overwrite local work. In that case, checkout should stop and report a conflict instead of proceeding.
 
 ### Q5.3
 
-In detached HEAD state, `HEAD` stores a commit hash directly instead of a branch reference, so new commits still get created normally but no branch name moves forward to keep them reachable. Each new commit points to the previous detached commit as its parent, so history still forms a valid chain, but it becomes easy to lose because no branch ref names it. A user can recover those commits by creating a branch that points at the detached commit hash, for example by writing a new ref file or, conceptually, by running the Git equivalent of creating a branch from the current commit.
+In detached HEAD state, `HEAD` points directly to a commit hash instead of pointing to a branch name. If a user makes commits in this state, the new commits are still created normally, but no branch reference moves forward to remember them. As a result, those commits can become hard to find later because they are not attached to any branch.
+
+The user can recover them by creating a new branch that points to the detached commit chain. As long as the commit hash is known and the objects have not been garbage collected, the work can be saved again by attaching a branch reference to it.
 
 ### Q6.1
 
-Garbage collection can use a mark-and-sweep approach. In the mark phase, start from every reachable reference such as `.pes/refs/heads/*` and `HEAD` if it is detached. For each referenced commit, walk parent links backward and mark every commit object as reachable. For each reachable commit, mark its tree, recursively parse that tree, and mark every referenced subtree and blob. A hash set is the right data structure for tracking visited object IDs efficiently because membership checks must be close to O(1). In the sweep phase, scan `.pes/objects/**` and delete any object whose hash is not in the reachable set. With 100,000 commits and 50 branches, the total number of visited commits is usually much closer to the size of the shared history graph than 5,000,000 because branches often share ancestry. In a worst case with no shared history you could visit roughly 100,000 commit objects plus the trees and blobs reachable from those commits; in a realistic repository you would still need to visit every reachable commit and tree at least once.
+To find unreachable objects, I would use a mark-and-sweep algorithm. In the mark phase, I would begin from all references such as `.pes/refs/heads/*` and also `HEAD` if it stores a commit hash directly. From each reachable commit, I would walk through its parent links and mark all commit objects. For every reachable commit, I would also load its tree, recursively walk through all subtree entries, and mark the corresponding tree and blob objects.
+
+To store the reachable hashes efficiently, I would use a hash set because lookup and insertion are fast. After marking is complete, I would scan all files inside `.pes/objects/` and delete anything whose hash is not present in the reachable set.
+
+For a repository with 100,000 commits and 50 branches, the number of visited objects depends on how much history is shared between branches. In practice, many branches share commits, so the total commits visited is usually much closer to 100,000 than to 5,000,000. Along with those commits, all referenced trees and blobs would also need to be visited once.
 
 ### Q6.2
 
-Running GC concurrently with a commit is dangerous because commit creation is multi-step: first blobs and trees are written, then the commit object is written, and only after that is the branch ref updated. A race occurs if GC scans refs before the new branch pointer is updated, decides the newly written tree or commit is unreachable, and deletes it just before `head_update()` makes the ref point to that commit. The branch would then reference an object that no longer exists. Real Git avoids this with reachability rules around recent objects, locking, coordination between reference updates and maintenance, and conservative pruning policies that delay deletion instead of immediately removing newly unreachable-looking objects.
+Running garbage collection at the same time as a commit is dangerous because commit creation happens in multiple steps. First the blob and tree objects are written, then the commit object is written, and only after that does the branch reference get updated. During this short window, the new objects exist on disk but are not yet reachable from any branch.
+
+If garbage collection runs at that exact time, it may scan the references, decide those newly written objects are unreachable, and delete them before the branch is updated. That would leave the branch pointing to a commit whose objects are missing. Real Git avoids this kind of problem by using careful coordination, locking, and conservative pruning rules so that newly created objects are not deleted immediately.
