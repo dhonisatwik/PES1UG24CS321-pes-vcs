@@ -600,3 +600,81 @@ The following questions cover filesystem concepts beyond the implementation scop
 - **Git Internals** (Pro Git book): https://git-scm.com/book/en/v2/Git-Internals-Plumbing-and-Porcelain
 - **Git from the inside out**: https://codewords.recurse.com/issues/two/git-from-the-inside-out
 - **The Git Parable**: https://tom.preston-werner.com/2009/05/19/the-git-parable.html
+
+---
+
+# Submission Report
+
+## Student Details
+
+- Name: Dhoni Satwik
+- SRN: PES1UG24CS321
+- PES author string used for commits: `Dhoni Satwik <PES1UG24CS321>`
+
+## Environment Note
+
+The lab code is written for Ubuntu 22.04. The implementation was completed and validated in this local repo on macOS, so local builds used `make all LDFLAGS=''` because macOS did not expose OpenSSL headers and `libcrypto` in the default toolchain path. The code remains compatible with Ubuntu 22.04, where the provided prerequisite `libssl-dev` matches the original starter instructions.
+
+For local CLI runs on this machine, `pes` commands were executed with a larger shell stack limit because the provided `pes.c` allocates a large `Index` on the stack and that file is marked "do not modify" in the template.
+
+## Screenshot Inventory
+
+- Phase 1A: `screenshots/1A-phase1-test_objects.svg`
+- Phase 1B: `screenshots/1B-phase1-object-store.svg`
+- Phase 2A: `screenshots/2A-phase2-test_tree.svg`
+- Phase 2B: `screenshots/2B-phase2-tree-xxd.svg`
+- Phase 3A: `screenshots/3A-phase3-init-add-status.svg`
+- Phase 3B: `screenshots/3B-phase3-index.svg`
+- Phase 4A: `screenshots/4A-phase4-log.svg`
+- Phase 4B: `screenshots/4B-phase4-find-pes.svg`
+- Phase 4C: `screenshots/4C-phase4-refs.svg`
+- Final integration test: `screenshots/final-test-integration.svg`
+
+Raw terminal captures used to generate the archived screenshot files are stored in `screenshots/raw/`.
+
+## Implementation Summary
+
+- `object.c`: implemented content-addressable object writes and verified object reads with integrity checking.
+- `tree.c`: implemented recursive tree construction from the staged index.
+- `index.c`: implemented index load, atomic save, and file staging.
+- `commit.c`: implemented commit creation from the staged snapshot and HEAD update.
+
+## Phase Notes
+
+### Phase 1
+
+`./test_objects` passed successfully. The object store shows hashed objects under sharded directories based on the first two hex characters of the SHA-256 digest.
+
+### Phase 2
+
+`./test_tree` passed successfully. A staged snapshot was committed afterward to create a real tree object, and `xxd` was used to inspect the raw binary tree format.
+
+### Phase 3
+
+`pes init`, `pes add`, and `pes status` were run successfully. Because the commands were executed inside the assignment repository itself, the status screenshot shows the repository files as untracked in addition to the staged demo files.
+
+### Phase 4
+
+Three commits were created and `pes log` correctly walked commit history through the parent chain. The reference files in `.pes/HEAD` and `.pes/refs/heads/main` point to the latest commit as expected.
+
+## Analysis Answers
+
+### Q5.1
+
+To implement `pes checkout <branch>`, I would first update `.pes/HEAD` so it points to `ref: refs/heads/<branch>` if the branch exists. Then I would read the commit hash from `.pes/refs/heads/<branch>`, load that commit object, load its root tree, and recursively materialize that tree into the working directory. Files that exist in the current working tree but not in the target tree would need to be removed, files that changed would need to be rewritten from blob objects, and directories would need to be created or deleted to match the target snapshot. The operation is complex because it is not just a metadata update: it must safely reconcile branch metadata, index state, file deletions, directory structure changes, permissions, and uncommitted local modifications.
+
+### Q5.2
+
+I would detect checkout conflicts by comparing three views of each tracked path: the index entry, the current working directory file, and the target branch tree. For each path tracked in the index, I would `stat()` the working file and compare its current `mtime` and `size` to the metadata stored in the index. If they differ, the file is dirty relative to the staged copy. Then I would load the target branch tree and check whether that same path points to a different blob hash or disappears entirely in the target branch. If a file is dirty in the working directory and the target branch would overwrite or remove it, checkout must refuse. This uses only the index metadata plus blob/tree hashes from the object store.
+
+### Q5.3
+
+In detached HEAD state, `HEAD` stores a commit hash directly instead of a branch reference, so new commits still get created normally but no branch name moves forward to keep them reachable. Each new commit points to the previous detached commit as its parent, so history still forms a valid chain, but it becomes easy to lose because no branch ref names it. A user can recover those commits by creating a branch that points at the detached commit hash, for example by writing a new ref file or, conceptually, by running the Git equivalent of creating a branch from the current commit.
+
+### Q6.1
+
+Garbage collection can use a mark-and-sweep approach. In the mark phase, start from every reachable reference such as `.pes/refs/heads/*` and `HEAD` if it is detached. For each referenced commit, walk parent links backward and mark every commit object as reachable. For each reachable commit, mark its tree, recursively parse that tree, and mark every referenced subtree and blob. A hash set is the right data structure for tracking visited object IDs efficiently because membership checks must be close to O(1). In the sweep phase, scan `.pes/objects/**` and delete any object whose hash is not in the reachable set. With 100,000 commits and 50 branches, the total number of visited commits is usually much closer to the size of the shared history graph than 5,000,000 because branches often share ancestry. In a worst case with no shared history you could visit roughly 100,000 commit objects plus the trees and blobs reachable from those commits; in a realistic repository you would still need to visit every reachable commit and tree at least once.
+
+### Q6.2
+
+Running GC concurrently with a commit is dangerous because commit creation is multi-step: first blobs and trees are written, then the commit object is written, and only after that is the branch ref updated. A race occurs if GC scans refs before the new branch pointer is updated, decides the newly written tree or commit is unreachable, and deletes it just before `head_update()` makes the ref point to that commit. The branch would then reference an object that no longer exists. Real Git avoids this with reachability rules around recent objects, locking, coordination between reference updates and maintenance, and conservative pruning policies that delay deletion instead of immediately removing newly unreachable-looking objects.
