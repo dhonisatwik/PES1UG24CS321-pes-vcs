@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="530" viewBox="0 0 900 530">
+  <rect width="900" height="530" rx="16" fill="#0f172a"/>
+  <rect x="0" y="0" width="900" height="34" rx="16" fill="#111827"/>
+  <rect x="0" y="34" width="900" height="496" fill="#0f172a"/>
+  <circle cx="24" cy="17" r="6" fill="#f87171"/>
+  <circle cx="44" cy="17" r="6" fill="#fbbf24"/>
+  <circle cx="64" cy="17" r="6" fill="#34d399"/>
+  <text x="90" y="22" fill="#94a3b8" font-family="Menlo, Monaco, Consolas, monospace" font-size="14">terminal capture</text>
+  <g font-family="Menlo, Monaco, Consolas, monospace" font-size="16">
+    <text x="24" y="56" fill="#d6deeb">$ ./pes log</text> <text x="24" y="78" fill="#d6deeb">commit c4a8f4579f828b4e602af7cf8a4a34b396eb0c709ed6dc516a867dd93d6623a0</text> <text x="24" y="100" fill="#d6deeb">Author: Dhoni Satwik &lt;PES1UG24CS321&gt;</text> <text x="24" y="122" fill="#d6deeb">Date:   1776831819</text> <text x="24" y="144" fill="#d6deeb"></text> <text x="24" y="166" fill="#d6deeb">    Add farewell</text> <text x="24" y="188" fill="#d6deeb"></text> <text x="24" y="210" fill="#d6deeb">commit ffbc36b3bd5ea3e8a41869fc0280cf47439f7b136ff66f8d8f7c465d363d20a3</text> <text x="24" y="232" fill="#d6deeb">Author: Dhoni Satwik &lt;PES1UG24CS321&gt;</text> <text x="24" y="254" fill="#d6deeb">Date:   1776831819</text> <text x="24" y="276" fill="#d6deeb"></text> <text x="24" y="298" fill="#d6deeb">    Add world</text> <text x="24" y="320" fill="#d6deeb"></text> <text x="24" y="342" fill="#d6deeb">commit e9e6a3d170ca3f98964e5b42a118bffac05cd50204fc4dd1e32bed481a4c9e20</text> <text x="24" y="364" fill="#d6deeb">Author: Dhoni Satwik &lt;PES1UG24CS321&gt;</text> <text x="24" y="386" fill="#d6deeb">Date:   1776831819</text> <text x="24" y="408" fill="#d6deeb"></text> <text x="24" y="430" fill="#d6deeb">    Initial commit</text> <text x="24" y="452" fill="#d6deeb"></text>
+  </g>
+</svg>

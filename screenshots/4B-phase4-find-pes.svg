@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="376" viewBox="0 0 900 376">
+  <rect width="900" height="376" rx="16" fill="#0f172a"/>
+  <rect x="0" y="0" width="900" height="34" rx="16" fill="#111827"/>
+  <rect x="0" y="34" width="900" height="342" fill="#0f172a"/>
+  <circle cx="24" cy="17" r="6" fill="#f87171"/>
+  <circle cx="44" cy="17" r="6" fill="#fbbf24"/>
+  <circle cx="64" cy="17" r="6" fill="#34d399"/>
+  <text x="90" y="22" fill="#94a3b8" font-family="Menlo, Monaco, Consolas, monospace" font-size="14">terminal capture</text>
+  <g font-family="Menlo, Monaco, Consolas, monospace" font-size="16">
+    <text x="24" y="56" fill="#d6deeb">.pes/HEAD</text> <text x="24" y="78" fill="#d6deeb">.pes/index</text> <text x="24" y="100" fill="#d6deeb">.pes/objects/05/c8d777d0be85748b6788d1b5caf7d69754e6e68060c265ca21cbd6c05e5f43</text> <text x="24" y="122" fill="#d6deeb">.pes/objects/66/224663d23e6f4d9de9e2c7e6d8764305a92a3830a1a52d3d5f4aa8007b5c39</text> <text x="24" y="144" fill="#d6deeb">.pes/objects/a6/882ee4afdc855ea4e39f4e0fc77d90e73a6f72deb383e11934310a10a030f6</text> <text x="24" y="166" fill="#d6deeb">.pes/objects/bd/9b769bb4d9910c31b4f0e99e4375fffea35c2055130c248ff131f78c626442</text> <text x="24" y="188" fill="#d6deeb">.pes/objects/c4/a8f4579f828b4e602af7cf8a4a34b396eb0c709ed6dc516a867dd93d6623a0</text> <text x="24" y="210" fill="#d6deeb">.pes/objects/d8/f28203071e10a3bde605928368bc5b51871287a867d8d10382967099dde814</text> <text x="24" y="232" fill="#d6deeb">.pes/objects/e6/7ed66bcb4a708250a89f315d4d8bb92703343c84df834438880e13a68652bc</text> <text x="24" y="254" fill="#d6deeb">.pes/objects/e9/e6a3d170ca3f98964e5b42a118bffac05cd50204fc4dd1e32bed481a4c9e20</text> <text x="24" y="276" fill="#d6deeb">.pes/objects/ff/bc36b3bd5ea3e8a41869fc0280cf47439f7b136ff66f8d8f7c465d363d20a3</text> <text x="24" y="298" fill="#d6deeb">.pes/refs/heads/main</text>
+  </g>
+</svg>
